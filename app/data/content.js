@@ -615,7 +615,7 @@ CONTENT.screens = [
     panel: 'You have added your support request to your [claim/appeal/application]',
     blocks: [
       { h2: 'What happens next' },
-      { p: 'Once you submit your [claim/appeal/application], the tribunal will review your support request and contact you if it needs any more information.' },
+      { p: 'Once you submit your [claim/appeal/application], the tribunal will review your support request. Some reasonable adjustments may need to be approved by a judge. The tribunal may contact you if more information is needed.' },
       { p: 'You can tell us if your support needs change after you submit your [claim/appeal/application].' }
     ],
     /* The wireframe draws a "Save as draft" secondary button beside this one.

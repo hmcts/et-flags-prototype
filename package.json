@@ -1,4 +1,8 @@
 {
+  "name": "cuiys-et-prototype",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Employment Tribunals Your Support journeys built with the GOV.UK Prototype Kit.",
   "scripts": {
     "dev": "govuk-prototype-kit dev",
     "serve": "govuk-prototype-kit serve",
@@ -6,12 +10,15 @@
   },
   "dependencies": {
     "@govuk-prototype-kit/common-templates": "3.0.0",
-    "govuk-frontend": "6.1.0",
+    "govuk-frontend": "6.4.0",
     "govuk-prototype-components": "npm:@x-govuk/govuk-prototype-components@6.0.0",
     "govuk-prototype-kit": "13.20.0",
     "moj-frontend": "npm:@ministryofjustice/frontend@9.0.0"
   },
   "devDependencies": {
     "playwright": "1.59.1"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }

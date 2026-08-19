@@ -1,0 +1,13 @@
+{% for block in screen.blocks %}
+  {% if block.p %}
+    <p class="govuk-body">{{ block.p }}</p>
+  {% elseif block.h2 %}
+    <h2 class="govuk-heading-m">{{ block.h2 }}</h2>
+  {% elseif block.inset %}
+    <div class="govuk-inset-text">{{ block.inset }}</div>
+  {% elseif block.ul %}
+    <ul class="govuk-list govuk-list--bullet">
+      {% for item in block.ul %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+{% endfor %}

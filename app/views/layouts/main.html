@@ -1,6 +1,100 @@
-{#
-For guidance on how to use layouts see:
-https://prototype-kit.service.gov.uk/docs/how-to-use-layouts
-#}
-
 {% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
+
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set pageName = screen.title or screen.heading or "Your Support" %}
+
+{% block header %}
+  {{ govukHeader({
+    homepageUrl: "#",
+    containerClasses: "govuk-width-container",
+    attributes: {
+      "data-inert": "GOV.UK homepage"
+    }
+  }) }}
+
+  {% set serviceNavigationItems = [] %}
+  {% if shell.signOut %}
+    {% set serviceNavigationItems = [{
+      href: "#",
+      text: "Sign out",
+      attributes: {
+        "data-inert": "Sign out"
+      }
+    }] %}
+  {% endif %}
+
+  {{ govukServiceNavigation({
+    serviceName: shell.serviceName,
+    navigation: serviceNavigationItems
+  }) }}
+{% endblock %}
+
+{% block beforeContent %}
+  {% if shell.phaseBanner or shell.cymraeg %}
+    <div class="proto-banner-row">
+      {% if shell.phaseBanner %}
+        {{ govukPhaseBanner({
+          tag: {
+            text: shell.phaseTag or "Beta"
+          },
+          html: shell.phaseBanner
+        }) }}
+      {% endif %}
+
+      {% if shell.cymraeg %}
+        <p class="proto-cymraeg"><a class="govuk-link" href="#" data-inert="Welsh language toggle">Cymraeg</a></p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if shell.backLink or shell.contactDisclosure %}
+    <div class="proto-nav-row">
+      {% if shell.backLink %}
+        {% if shell.backLinkInert %}
+          {{ govukBackLink({ text: "Back", href: "#", attributes: { "data-inert": "Back to the calling service" } }) }}
+        {% else %}
+          {{ govukBackLink({ text: "Back", href: shell.backUrl }) }}
+        {% endif %}
+      {% else %}
+        <span></span>
+      {% endif %}
+
+      {% if shell.contactDisclosure %}
+        {{ govukDetails({
+          summaryText: "Contact",
+          text: "[Service contact details]",
+          classes: "proto-contact-details"
+        }) }}
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  {% set footerItems = [] %}
+  {% for text in shell.footerLinks %}
+    {% set footerItems = footerItems.concat([{
+      href: "#",
+      text: text,
+      attributes: { "data-inert": text }
+    }]) %}
+  {% endfor %}
+
+  {{ govukFooter({
+    meta: {
+      items: footerItems,
+      visuallyHiddenTitle: "Support links"
+    }
+  }) }}
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  {% include "partials/prototype-bar.html" %}
+{% endblock %}

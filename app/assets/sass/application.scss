@@ -1,6 +1,413 @@
-//
-// For guidance on how to add CSS and SCSS see:
-// https://prototype-kit.service.gov.uk/docs/adding-css-javascript-and-images
-// 
+/* ==========================================================================
+   Prototype-only chrome.
 
-// Add extra styles here
+   Nothing in this file styles the service. It styles the bar along the bottom
+   of the window that exists so a demo can be driven — reset, jump to any
+   screen, read the release notes. Deliberately not GOV.UK-branded, so nobody
+   in the room mistakes it for part of the design.
+   ========================================================================== */
+
+:root {
+  --proto-bar-height: 46px;
+}
+
+/* Keep the GOV.UK footer clear of the fixed bar. */
+.govuk-template__body {
+  padding-bottom: var(--proto-bar-height);
+}
+
+#demo-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.proto-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-height: var(--proto-bar-height);
+  padding: 6px 15px;
+  box-sizing: border-box;
+  background: #0b0c0c;
+  color: #ffffff;
+  border-top: 3px solid #ffdd00;
+}
+
+.proto-bar__label {
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #ffdd00;
+  white-space: nowrap;
+}
+
+.proto-bar__spacer { flex: 1 1 auto; }
+
+.proto-bar form { margin: 0; }
+
+.proto-bar__jump {
+  flex: 1 1 280px;
+  min-width: 220px;
+}
+
+.proto-bar__jump select {
+  min-width: 0;
+  width: 100%;
+}
+
+.proto-bar__field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.proto-bar select,
+.proto-bar button {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 4px 8px;
+  border: 1px solid #b1b4b6;
+  border-radius: 2px;
+  background: #ffffff;
+  color: #0b0c0c;
+  cursor: pointer;
+  max-width: 46vw;
+}
+
+.proto-bar select { padding-right: 4px; }
+
+.js-enabled .proto-bar__go { display: none; }
+
+.proto-bar button:hover { background: #f3f2f1; }
+
+.proto-bar button[aria-expanded="true"] {
+  background: #ffdd00;
+  border-color: #ffdd00;
+  font-weight: 700;
+}
+
+/* The two journey entry points. The current one is marked so it is obvious
+   which half of the prototype you are in. */
+.proto-bar__starts { gap: 4px; }
+
+.proto-bar button[aria-current="true"] {
+  background: #1d70b8;
+  border-color: #1d70b8;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.proto-bar :focus-visible {
+  outline: 3px solid #ffdd00;
+  outline-offset: 0;
+  box-shadow: 0 2px 0 2px #0b0c0c;
+}
+
+/* --------------------------------------------------------- release notes */
+
+.proto-notes {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 20px 15px 24px;
+  background: #ffffff;
+  color: #0b0c0c;
+  border-top: 1px solid #b1b4b6;
+  box-shadow: 0 -4px 12px rgba(11, 12, 12, 0.25);
+}
+
+.proto-notes__inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.proto-notes h2 {
+  font-size: 22px;
+  margin: 0 0 4px;
+}
+
+.proto-notes h3 {
+  font-size: 16px;
+  margin: 20px 0 4px;
+}
+
+.proto-notes p,
+.proto-notes li {
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0 0 8px;
+}
+
+.proto-notes ul {
+  margin: 0 0 8px;
+  padding-left: 20px;
+}
+
+.proto-notes__meta {
+  color: #505a5f;
+  font-size: 13px;
+}
+
+.proto-notes__flag {
+  border-left: 5px solid #ffdd00;
+  padding: 2px 0 2px 14px;
+  margin: 0 0 12px;
+}
+
+/* ==========================================================================
+   Page shells
+
+   The Service shell needs almost nothing: govuk-frontend v6's header is
+   already brand blue (#1d70b8) and its service navigation is already #f4f8fb
+   on a #8eb8dc border, which is exactly what wireframe 1 and screen 18's CSS
+   export specify.
+
+   The Microsite shell is the one that departs from stock — a black bar with
+   the service name centred and Sign out on the right, then a blue strip.
+   ========================================================================== */
+
+.proto-header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+/* The black microsite bar the wireframes draw. RETIRED at the 13 August 2026
+   review, which made every screen blue — see the note on CONTENT.shells.microsite
+   in content.js. Kept because it is what the designs actually show, and because
+   reverting is then one word of content rather than a CSS archaeology exercise.
+   Nothing selects it while headerTheme is 'et' everywhere. */
+.proto-header--microsite {
+  background: #0b0c0c;
+  border-bottom: 0;
+}
+
+/* govuk-frontend's default brand blue, so this theme only removes the border the
+   black variant needed. Used by every screen with a centred header bar. */
+.proto-header--et {
+  border-bottom: 0;
+}
+
+.proto-header__service-name {
+  font-family: "GDS Transport", arial, sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.proto-header__signout {
+  font-family: "GDS Transport", arial, sans-serif;
+  font-size: 19px;
+  color: #ffffff;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.proto-header__signout:hover { color: #ffffff; }
+.proto-header__signout:focus { color: #0b0c0c; }
+
+.proto-header__strip {
+  height: 10px;
+  background: #1d70b8;
+}
+
+/* On narrow screens the three-up header wraps rather than crushing. */
+@media (max-width: 40.0525em) {
+  .proto-header__container { flex-wrap: wrap; }
+  .proto-header__service-name { order: 3; width: 100%; text-align: left; padding: 0 0 10px; }
+}
+
+/* Phase banner and Cymraeg share a row; Back and Contact share the next. */
+.proto-banner-row,
+.proto-nav-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.proto-banner-row .govuk-phase-banner { flex: 1 1 auto; }
+
+.proto-cymraeg {
+  margin: 0;
+  padding: 10px 0;
+  font-family: "GDS Transport", arial, sans-serif;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.proto-nav-row .govuk-back-link { margin-bottom: 0; }
+
+.proto-contact-details {
+  margin-bottom: 0;
+}
+
+.proto-contact-details .govuk-details__summary { display: inline-block; }
+
+/* The [Contacts for help] block above the footer, on microsite screens. */
+.proto-contacts {
+  margin-bottom: 40px;
+}
+
+/* Screen 18's Figma CSS export gives the confirmation panel a #1D70B8
+   background, where the stock GOV.UK panel is green. Reproduced as drawn. */
+.govuk-panel--confirmation {
+  background: #1d70b8;
+}
+
+/* Programmatic focus lands on the h1 after every screen change so a screen
+   reader announces the new page. The heading is tabindex="-1", so it is not
+   keyboard-reachable and the ring would only ever appear for that
+   programmatic move — which reads as a rendering fault. :focus-visible keeps
+   the indicator if focus somehow does arrive by keyboard. */
+#page-heading:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------ prototype notes
+   Inline warnings about things a stakeholder could otherwise mistake for
+   real. Deliberately not GOV.UK-styled. */
+
+.proto-inline-note {
+  border-left: 5px solid #ffdd00;
+  padding: 4px 0 4px 14px;
+  margin: -10px 0 25px;
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #505a5f;
+}
+
+/* govuk-frontend tightens the gap under a textarea inside a character count
+   but not under an input, because the component was designed for textareas. */
+.govuk-character-count .govuk-input { margin-bottom: 5px; }
+
+/* ==========================================================================
+   Stage 2 — Manage support
+
+   The case overview dashboard needs one component GOV.UK Frontend does not
+   have: the case progress bar. Everything else on both stage 2 screens is
+   stock (task list, tables, details, tag).
+   ========================================================================== */
+
+/* The blue rule above each dashboard column, as drawn. */
+.proto-section {
+  border-top: 2px solid #1d70b8;
+  padding-top: 20px;
+  margin-top: 10px;
+}
+
+.proto-aside-list li { margin-bottom: 15px; }
+
+/* --------------------------------------------------- progress tracker */
+
+.proto-progress {
+  display: flex;
+  list-style: none;
+  margin: 10px 0 30px;
+  padding: 0;
+}
+
+.proto-progress__step {
+  position: relative;
+  flex: 1 1 0;
+  text-align: center;
+  padding: 0 5px;
+  font-family: "GDS Transport", arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.25;
+  color: #0b0c0c;
+}
+
+.proto-progress__marker {
+  /* Sits above the connecting line, which runs behind it. */
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin: 0 auto 12px;
+  border: 4px solid #00703c;
+  border-radius: 50%;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.proto-progress__step--done .proto-progress__marker { background: #00703c; }
+
+/* The connecting line. Drawn per step rather than as one element behind the
+   row, so it survives the vertical stack on small screens without a second
+   set of rules fighting it. No negative z-index — that would put it behind
+   the page background rather than behind the markers. */
+.proto-progress__step + .proto-progress__step::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  right: 50%;
+  left: -50%;
+  height: 4px;
+  background: #00703c;
+}
+
+.proto-progress__step--current .proto-progress__label { font-weight: 700; }
+
+@media (max-width: 40.0525em) {
+  .proto-progress { display: block; }
+
+  .proto-progress__step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    padding: 0 0 18px 0;
+  }
+
+  .proto-progress__marker { margin: 0; flex: 0 0 auto; }
+
+  /* Vertical connector between stacked steps. */
+  .proto-progress__step + .proto-progress__step::before {
+    top: -18px;
+    left: 9px;
+    right: auto;
+    width: 4px;
+    height: 18px;
+  }
+}
+
+/* The .proto-placeholder styles that lived here went with the two placeholder
+   screens at the 13 August 2026 review. Nothing in the prototype is a
+   stand-in for a missing wireframe any more. */
+
+/* ------------------------------------------- Reasonable adjustments --
+   The rows on that page are a label and an action, with nothing in between.
+   govuk-summary-list gives the value column half the row by default, which
+   leaves the actions column too narrow for "I no longer need this" and wraps
+   every one of them onto two lines. The design has them on one.
+
+   Only the widths change; the component's own stacking rule still takes over
+   below the tablet breakpoint, where the row becomes one column anyway. */
+
+@media (min-width: 40.0625em) {
+  .proto-summary-list--no-value .govuk-summary-list__key { width: 60%; }
+  .proto-summary-list--no-value .govuk-summary-list__value { width: 5%; padding-right: 0; }
+  .proto-summary-list--no-value .govuk-summary-list__actions { width: 35%; }
+}
+
+/* --------------------------------------------------------------- print */
+
+@media print {
+  #demo-bar { display: none; }
+  .govuk-template__body { padding-bottom: 0; }
+}

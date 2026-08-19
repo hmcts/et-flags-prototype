@@ -1,0 +1,14 @@
+{% extends "layouts/screen.html" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block screenContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l" id="page-heading">{{ confirmHeading }}</h1>
+      <div class="govuk-button-group">
+        {{ govukButton({ text: confirmLabel, href: "/manage-support/your-support" }) }}
+        <a class="govuk-link" href="/manage-support/your-support">{{ screen.cancel }}</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

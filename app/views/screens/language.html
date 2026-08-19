@@ -1,0 +1,72 @@
+{% extends "layouts/screen.html" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block screenContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% include "partials/heading.html" %}
+      {% include "partials/blocks.html" %}
+
+      <form action="{{ formAction }}" method="post" novalidate>
+        {{ govukInput({
+          label: { text: screen.selectLabel },
+          id: screen.id + "-language",
+          name: "language",
+          value: languageStore.language,
+          classes: "govuk-input--width-20",
+          autocomplete: "off",
+          attributes: { list: screen.id + "-languages" }
+        }) }}
+
+        <datalist id="{{ screen.id }}-languages">
+          {% for language in content.placeholderLanguages[screen.languages] %}
+            <option value="{{ language }}"></option>
+          {% endfor %}
+        </datalist>
+
+        <p class="proto-inline-note">{{ content.placeholderNote }}</p>
+
+        {% set manualHtml %}
+          <div class="govuk-form-group govuk-character-count">
+            {{ govukInput({
+              label: { text: screen.manual.revealLabel },
+              id: screen.id + "-manual-text",
+              name: "manual-text",
+              value: languageStore.manual,
+              classes: "govuk-js-character-count",
+              attributes: {
+                "data-maxlength": screen.manual.maxLength,
+                "aria-describedby": screen.id + "-manual-text-info"
+              }
+            }) }}
+            <div id="{{ screen.id }}-manual-text-info" class="govuk-hint govuk-character-count__message" aria-hidden="true"></div>
+            <div class="govuk-visually-hidden" aria-live="polite" id="{{ screen.id }}-manual-text-live"></div>
+          </div>
+        {% endset %}
+
+        {{ govukCheckboxes({
+          name: "manual",
+          idPrefix: screen.id + "-manual",
+          items: [
+            { divider: "or" },
+            {
+              id: screen.id + "-manual",
+              value: "yes",
+              text: screen.manual.label,
+              hint: { text: screen.manual.hint },
+              checked: languageStore.manual,
+              conditional: { html: manualHtml }
+            }
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({ text: "Continue", name: "action", value: "continue" }) }}
+          <a class="govuk-link" href="/prototype/reset?journey={{ screen.journey }}">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

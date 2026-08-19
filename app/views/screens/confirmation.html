@@ -1,0 +1,20 @@
+{% extends "layouts/screen.html" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block screenContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({ titleText: screen.panel }) }}
+      {% include "partials/blocks.html" %}
+
+      {{ govukButton({
+        text: screen.actions.primary.label,
+        href: "/prototype/start/request"
+      }) }}
+
+      <h2 class="govuk-heading-m">{{ screen.contact.heading }}</h2>
+      <p class="govuk-body">{{ screen.contact.body }}</p>
+    </div>
+  </div>
+{% endblock %}

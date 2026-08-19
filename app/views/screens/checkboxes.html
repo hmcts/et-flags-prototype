@@ -1,0 +1,69 @@
+{% extends "layouts/screen.html" %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% block screenContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="{{ formAction }}" method="post" novalidate>
+        {% if screen.legend %}
+          {% include "partials/heading.html" %}
+          {% include "partials/blocks.html" %}
+          {{ govukCheckboxes({
+            name: "answer",
+            idPrefix: screen.id,
+            fieldset: {
+              legend: {
+                text: screen.legend,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: { text: screen.hint } if screen.hint,
+            items: checkboxItems
+          }) }}
+        {% else %}
+          {% set questionHtml %}
+            {% if screen.caption %}<span class="govuk-caption-l">{{ screen.caption }}</span>{% endif %}
+            <h1 class="govuk-fieldset__heading" id="page-heading">{{ screen.heading }}</h1>
+          {% endset %}
+
+          {{ govukCheckboxes({
+            name: "answer",
+            idPrefix: screen.id,
+            fieldset: {
+              describedBy: screen.id + "-hint" if screen.hint,
+              legend: {
+                html: questionHtml,
+                classes: "govuk-fieldset__legend--l"
+              }
+            },
+            formGroup: {
+              beforeInputs: { html: questionIntroHtml }
+            },
+            items: checkboxItems
+          }) }}
+        {% endif %}
+
+        {% if screen.after %}
+          {% for block in screen.after.blocks %}
+            {% if block.p %}<p class="govuk-body">{{ block.p }}</p>{% endif %}
+            {% if block.h2 %}<h2 class="govuk-heading-m">{{ block.h2 }}</h2>{% endif %}
+          {% endfor %}
+          {{ govukCharacterCount({
+            name: screen.after.field.id,
+            id: screen.after.field.id,
+            maxlength: screen.after.field.maxLength,
+            value: state.specialMeasures.reason,
+            label: { text: screen.after.field.label }
+          }) }}
+        {% endif %}
+
+        <div class="govuk-button-group">
+          {{ govukButton({ text: "Continue", name: "action", value: "continue" }) }}
+          <a class="govuk-link" href="/prototype/reset?journey={{ screen.journey }}">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "layouts/screen.html" %}
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block screenContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l" id="page-heading">{{ screen.heading }}</h1>
+      <p class="govuk-body">{{ screen.caseNumber }}</p>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="proto-section">
+        <ol class="proto-progress">
+          {% for step in screen.progress %}
+            <li class="proto-progress__step proto-progress__step--{{ step.state }}"{% if step.state == "current" %} aria-current="step"{% endif %}>
+              <span class="proto-progress__marker" aria-hidden="true"></span>
+              <span class="proto-progress__label">
+                <span class="govuk-visually-hidden">
+                  {% if step.state == "done" %}Completed: {% elseif step.state == "current" %}Current stage: {% else %}Not yet reached: {% endif %}
+                </span>
+                {{ step.label }}
+              </span>
+            </li>
+          {% endfor %}
+        </ol>
+
+        <h2 class="govuk-heading-m">{{ screen.taskHeading }}</h2>
+        {{ govukTaskList({ items: taskListItems }) }}
+      </div>
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+      <div class="proto-section">
+        <h2 class="govuk-heading-s">{{ screen.aside.heading }}</h2>
+        <ul class="govuk-list proto-aside-list">
+          {% for link in screen.aside.links %}
+            <li><a class="govuk-link" href="#" data-inert="{{ link }}">{{ link }}</a></li>
+          {% endfor %}
+        </ul>
+
+        {% set contactHtml %}
+          <p class="govuk-body">{{ content.etContact.intro }}</p>
+          <p class="govuk-body">{% for line in content.etContact.lines %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
+          <p class="govuk-body"><a class="govuk-link" href="#" data-inert="call charges">{{ content.etContact.link }}</a></p>
+        {% endset %}
+        {{ govukDetails({ summaryText: screen.aside.detailsSummary, html: contactHtml }) }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

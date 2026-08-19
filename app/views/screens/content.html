@@ -1,0 +1,35 @@
+{% extends "layouts/screen.html" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block screenContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% include "partials/heading.html" %}
+      {% include "partials/blocks.html" %}
+
+      <form action="{{ formAction }}" method="post" novalidate>
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: screen.actions.primary,
+            name: "action",
+            value: "continue",
+            isStartButton: screen.actions.primaryIsStart
+          }) }}
+
+          {% if screen.actions.secondary %}
+            {% if screen.actions.secondary.action == "cancel" %}
+              <a class="govuk-link" href="/prototype/reset?journey={{ screen.journey }}">{{ screen.actions.secondary.label }}</a>
+            {% else %}
+              {{ govukButton({
+                text: screen.actions.secondary.label,
+                name: "action",
+                value: screen.actions.secondary.action,
+                classes: "govuk-button--secondary"
+              }) }}
+            {% endif %}
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

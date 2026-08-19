@@ -1,0 +1,67 @@
+<div id="demo-bar">
+  <div class="proto-notes" id="proto-notes" tabindex="-1" role="region" aria-label="About this prototype" hidden>
+    <div class="proto-notes__inner">
+      <h2>About this prototype</h2>
+      <p class="proto-notes__meta">Your Support — GOV.UK Prototype Kit migration. Built from the reviewed high-fidelity wireframes.</p>
+
+      <h3>What this is</h3>
+      <p>Two journeys, selected from the <strong>Start</strong> buttons on the bar below.</p>
+      <p><strong>1. Request support</strong> — 16 screens, from the start page through to confirmation.</p>
+      <p><strong>2. Manage support</strong> — the Employment Tribunals case overview, Reasonable adjustments page, and a confirmation step. <strong>Early.</strong></p>
+      <p>No data leaves this prototype. Answers are held in the browser session until you select <strong>Reset</strong> or clear prototype data.</p>
+
+      <h3>Important limitations</h3>
+      <div class="proto-notes__flag">
+        <ul>
+          <li>Special measures are out of this iteration.</li>
+          <li>Manage support uses fixed example data and does not submit or change anything.</li>
+          <li>The are-you-sure screen has no wireframe and is based on a verbal description.</li>
+          <li><strong>Add a new support request</strong> on Reasonable adjustments does nothing because its destination is undecided.</li>
+          <li>The language lists are placeholders, not reference data.</li>
+          <li>Sign out, Cymraeg, feedback, contact and footer links are shown for fidelity but are inert.</li>
+        </ul>
+      </div>
+
+      <h3>Known inconsistencies are deliberate</h3>
+      <p>The source wireframes contain wording, character-limit and naming inconsistencies. They remain visible so they can be reviewed rather than silently resolved in the prototype.</p>
+
+      <h3>This demonstration is configured as one service</h3>
+      <p>The service tokens are filled as <strong>Employment Tribunals</strong>, party <strong>John Doe</strong>, <strong>tribunal</strong> and <strong>claim</strong>. Unresolved contact tokens remain in brackets.</p>
+    </div>
+  </div>
+
+  <div class="proto-bar">
+    <span class="proto-bar__label">Prototype</span>
+
+    <div class="proto-bar__field proto-bar__starts" aria-labelledby="proto-start-label">
+      <span id="proto-start-label">Start</span>
+      {% for journey in demoBar.journeys %}
+        <form action="/prototype/start/{{ journey.id }}" method="get">
+          <button type="submit"{% if journey.current %} aria-current="true"{% endif %}>{{ loop.index }}. {{ journey.label }}</button>
+        </form>
+      {% endfor %}
+    </div>
+
+    <form class="proto-bar__field proto-bar__jump" action="/prototype/jump" method="get">
+      <label for="proto-jump">Jump to</label>
+      <select id="proto-jump" name="screen">
+        {% for group in demoBar.groups %}
+          <optgroup label="{{ group.label }}">
+            {% for item in group.screens %}
+              <option value="{{ item.id }}"{% if item.current %} selected{% endif %}>{{ item.label }}</option>
+            {% endfor %}
+          </optgroup>
+        {% endfor %}
+      </select>
+      <button class="proto-bar__go" type="submit">Go</button>
+    </form>
+
+    <form action="/prototype/reset" method="get">
+      <input type="hidden" name="journey" value="{{ screen.journey }}">
+      <button type="submit">Reset</button>
+    </form>
+
+    <span class="proto-bar__spacer"></span>
+    <button type="button" data-proto="notes" aria-expanded="false" aria-controls="proto-notes">About this prototype</button>
+  </div>
+</div>

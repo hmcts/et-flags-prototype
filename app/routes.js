@@ -15,6 +15,16 @@ const VIEW_BY_TYPE = {
   'confirm-change': 'screens/confirm-change'
 }
 
+function redirectWithSessionSave (request, response, next, location) {
+  return request.session.save(function (error) {
+    if (error) {
+      return next(error)
+    }
+
+    return response.redirect(location)
+  })
+}
+
 router.get('/', function (request, response) {
   response.redirect('/request-support/start')
 })
@@ -23,19 +33,29 @@ router.get('/dashboard', function (request, response) {
   response.redirect('/manage-support/dashboard')
 })
 
-router.get('/prototype/start/:journey', function (request, response) {
+router.get('/prototype/start/:journey', function (request, response, next) {
   const journey = request.params.journey === 'manage' ? 'manage' : 'request'
   prototype.resetState(request)
-  response.redirect(prototype.pathFor(prototype.firstScreenOf(journey)))
+  return redirectWithSessionSave(
+    request,
+    response,
+    next,
+    prototype.pathFor(prototype.firstScreenOf(journey))
+  )
 })
 
-router.get('/prototype/reset', function (request, response) {
+router.get('/prototype/reset', function (request, response, next) {
   const journey = request.query.journey === 'manage' ? 'manage' : 'request'
   prototype.resetState(request)
-  response.redirect(prototype.pathFor(prototype.firstScreenOf(journey)))
+  return redirectWithSessionSave(
+    request,
+    response,
+    next,
+    prototype.pathFor(prototype.firstScreenOf(journey))
+  )
 })
 
-router.get('/prototype/jump', function (request, response) {
+router.get('/prototype/jump', function (request, response, next) {
   const screen = prototype.screenById(request.query.screen)
   if (!screen) {
     response.redirect('/request-support/start')
@@ -44,7 +64,7 @@ router.get('/prototype/jump', function (request, response) {
 
   const state = prototype.stateFor(request)
   prototype.seedFor(screen.id, state)
-  response.redirect(prototype.pathFor(screen))
+  return redirectWithSessionSave(request, response, next, prototype.pathFor(screen))
 })
 
 function screenForRequest (request) {
@@ -85,7 +105,7 @@ router.get('/:journey(request-support|manage-support)/:screenId', function (requ
   response.render(view, prototype.viewModel(screen, state, request.query))
 })
 
-router.post('/:journey(request-support|manage-support)/:screenId', function (request, response) {
+router.post('/:journey(request-support|manage-support)/:screenId', function (request, response, next) {
   const screen = screenForRequest(request)
   if (!screen) {
     response.redirect('/request-support/start')
@@ -99,32 +119,42 @@ router.post('/:journey(request-support|manage-support)/:screenId', function (req
 
   if (action === 'cancel' || action === 'restart') {
     prototype.resetState(request)
-    response.redirect(prototype.pathFor(prototype.firstScreenOf(screen.journey)))
-    return
+    return redirectWithSessionSave(
+      request,
+      response,
+      next,
+      prototype.pathFor(prototype.firstScreenOf(screen.journey))
+    )
   }
 
   if (action === 'add-another') {
-    response.redirect('/request-support/triage')
-    return
+    return redirectWithSessionSave(request, response, next, '/request-support/triage')
   }
 
   if (action === 'submit') {
-    response.redirect('/request-support/confirmation')
-    return
+    return redirectWithSessionSave(request, response, next, '/request-support/confirmation')
   }
 
   if (request.query.returnTo === 'cya') {
-    response.redirect('/request-support/cya')
-    return
+    return redirectWithSessionSave(request, response, next, '/request-support/cya')
   }
 
   if (screen.actions && screen.actions.primaryGoTo) {
-    response.redirect(prototype.pathFor(screen.actions.primaryGoTo))
-    return
+    return redirectWithSessionSave(
+      request,
+      response,
+      next,
+      prototype.pathFor(screen.actions.primaryGoTo)
+    )
   }
 
-  const next = prototype.nextScreenId(screen.id, state)
-  response.redirect(prototype.pathFor(next || prototype.firstScreenOf(screen.journey)))
+  const nextScreenId = prototype.nextScreenId(screen.id, state)
+  return redirectWithSessionSave(
+    request,
+    response,
+    next,
+    prototype.pathFor(nextScreenId || prototype.firstScreenOf(screen.journey))
+  )
 })
 
 module.exports = router

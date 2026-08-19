@@ -178,7 +178,7 @@ function collect (screen, body, state) {
     const store = screen.stateKey === 'signLanguage' ? state.signLanguage : state.interpreter
     store.language = String(body.language || '').trim() || null
     store.manual = asArray(body.manual).includes('yes')
-      ? String(body['manual-text'] || '').trim() || null
+      ? String(body['manual-text'] || '').trim()
       : null
   }
 }
@@ -390,6 +390,7 @@ function viewModel (screen, state, query = {}) {
   if (screen.type === 'radios') model.radioItems = radioItems(screen, state)
   if (screen.type === 'language') {
     model.languageStore = screen.stateKey === 'signLanguage' ? state.signLanguage : state.interpreter
+    model.manualSelected = model.languageStore.manual !== null && model.languageStore.manual !== undefined
   }
   if (screen.type === 'cya') {
     model.summaryRows = summaryRows(state)

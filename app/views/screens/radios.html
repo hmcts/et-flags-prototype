@@ -1,0 +1,31 @@
+{% extends "layouts/screen.html" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block screenContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% include "partials/heading.html" %}
+      {% include "partials/blocks.html" %}
+
+      <form action="{{ formAction }}" method="post" novalidate>
+        {{ govukRadios({
+          name: "answer",
+          idPrefix: screen.id,
+          fieldset: {
+            legend: {
+              text: screen.legend,
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: radioItems
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({ text: "Continue", name: "action", value: "continue" }) }}
+          <a class="govuk-link" href="/prototype/reset?journey={{ screen.journey }}">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

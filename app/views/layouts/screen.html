@@ -1,0 +1,14 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+  {% block screenContent %}{% endblock %}
+
+  {% if screen.shell == "microsite" %}
+    <div class="govuk-grid-row proto-contacts">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">{{ content.contactsForHelp.heading }}</h2>
+        <p class="govuk-body">{{ content.contactsForHelp.body }}</p>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

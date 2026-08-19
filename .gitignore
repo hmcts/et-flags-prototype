@@ -6,6 +6,8 @@ node_modules/
 .env
 migrate.log
 usage-data-config.json
+.playwright-cli/
+output/playwright/
 
 # General ignores
 .DS_Store

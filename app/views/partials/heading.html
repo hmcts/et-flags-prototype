@@ -1,0 +1,4 @@
+{% if screen.caption %}
+  <span class="govuk-caption-l">{{ screen.caption }}</span>
+{% endif %}
+<h1 class="govuk-heading-{{ screen.headingSize or 'l' }}" id="page-heading">{{ screen.heading }}</h1>

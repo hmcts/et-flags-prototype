@@ -12,7 +12,6 @@ const JOURNEY_LABELS = {
 function emptyState () {
   return {
     selections: {},
-    interpreter: { needed: null, language: null, manual: null },
     signLanguage: { language: null, manual: null },
     specialMeasures: { needed: null, reason: '' },
     pendingChange: null
@@ -53,8 +52,6 @@ function facade (state) {
   return {
     triage: selectedIds(state, 'triage'),
     selections: state.selections,
-    welsh: selectedIds(state, 'welsh'),
-    interpreter: state.interpreter.needed,
     specialMeasures: state.specialMeasures.needed,
     pendingChange: state.pendingChange
   }
@@ -117,7 +114,6 @@ const SEEDS = {
   comfort: (state) => pick(state, 'comfort'),
   support: (state) => pick(state, 'support'),
   hearings: (state) => pick(state, 'hearings'),
-  'interpreter-language': (state) => { state.interpreter.needed = 'yes' },
   'confirm-change': (state) => {
     state.pendingChange = { change: 'no-longer-need', item: 'Mobility support' }
   }
@@ -162,22 +158,13 @@ function collect (screen, body, state) {
 
   if (screen.type === 'radios') {
     const value = body.answer || null
-    if (screen.stateKey === 'interpreter') {
-      state.interpreter.needed = value
-      if (value === 'no') {
-        state.interpreter.language = null
-        state.interpreter.manual = null
-      }
-    } else {
-      state.specialMeasures.needed = value
-      if (value === 'no') state.specialMeasures.reason = ''
-    }
+    state.specialMeasures.needed = value
+    if (value === 'no') state.specialMeasures.reason = ''
   }
 
   if (screen.type === 'language') {
-    const store = screen.stateKey === 'signLanguage' ? state.signLanguage : state.interpreter
-    store.language = String(body.language || '').trim() || null
-    store.manual = asArray(body.manual).includes('yes')
+    state.signLanguage.language = String(body.language || '').trim() || null
+    state.signLanguage.manual = asArray(body.manual).includes('yes')
       ? String(body['manual-text'] || '').trim()
       : null
   }
@@ -269,16 +256,12 @@ function checkboxItems (screen, state) {
 }
 
 function radioItems (screen, state) {
-  const value = screen.stateKey === 'interpreter'
-    ? state.interpreter.needed
-    : state.specialMeasures.needed
-
   return screen.options.map((option) => ({
     id: `${screen.id}-${option.id}`,
     value: option.id,
     text: resolve(option.label),
     hint: option.hint ? { text: resolve(option.hint) } : undefined,
-    checked: value === option.id
+    checked: state.specialMeasures.needed === option.id
   }))
 }
 
@@ -310,15 +293,10 @@ function summaryRows (state) {
     }
 
     if (screen.type === 'language') {
-      const store = screen.stateKey === 'signLanguage' ? state.signLanguage : state.interpreter
-      const selectedLanguage = screen.stateKey === 'signLanguage'
-        ? selected(state, 'comm-signlanguage')
-        : state.interpreter.needed === 'yes'
-
-      if (selectedLanguage) {
+      if (selected(state, 'comm-signlanguage')) {
         rows.push({
           label: resolve(screen.summaryLabel),
-          value: store.manual || store.language || '',
+          value: state.signLanguage.manual || state.signLanguage.language || '',
           screenId: screen.id,
           focus: `${screen.id}-language`
         })
@@ -389,7 +367,7 @@ function viewModel (screen, state, query = {}) {
   if (screen.type === 'checkboxes') model.checkboxItems = checkboxItems(screen, state)
   if (screen.type === 'radios') model.radioItems = radioItems(screen, state)
   if (screen.type === 'language') {
-    model.languageStore = screen.stateKey === 'signLanguage' ? state.signLanguage : state.interpreter
+    model.languageStore = state.signLanguage
     model.manualSelected = model.languageStore.manual !== null && model.languageStore.manual !== undefined
   }
   if (screen.type === 'cya') {

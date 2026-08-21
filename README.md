@@ -20,7 +20,7 @@ The Prototype Kit management page is available at <http://localhost:3000/manage-
 
 ### Request support
 
-Sixteen screens from the service start page through to confirmation. The flow includes conditional reasonable-adjustment categories, language questions, a dynamic check-your-answers page and change links.
+Thirteen screens from the service start page through to confirmation. The flow includes conditional reasonable-adjustment categories, a sign-language question, a dynamic check-your-answers page and change links.
 
 Start at <http://localhost:3000/request-support/start>.
 
@@ -49,7 +49,7 @@ The black and yellow bar at the bottom is demonstration furniture, not part of t
 - This remains a prototype, with no API, database or persistent service storage.
 - Manage support uses fixed example data and confirming a change deliberately changes nothing.
 - Special measures remain outside this iteration.
-- Language lists are placeholders.
+- The sign-language list is placeholder data.
 - Some contact values remain unresolved tokens because no approved content was supplied.
 - The demonstrated build did not include form validation, so this migration also allows unanswered questions.
 - Unlike the archived prototype, this version requires a running Node.js server and is not a portable single HTML file.

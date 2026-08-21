@@ -9,8 +9,8 @@
    Three rules govern what is in here:
 
    1. VERBATIM. Copy is reproduced exactly as drawn, including the
-      inconsistencies — three different character limits, "a interpreter",
-      "certain type of hearing" missing its article, mixed sentence case in the
+      inconsistencies — three different character limits, "certain type of
+      hearing" missing its article, mixed sentence case in the
       special-measures list, "a hearing" / "my hearing" / "the hearing" drift.
       Do not tidy these. They are catalogued in REFERENCE.md and surfacing them
       is part of the point of the prototype.
@@ -129,16 +129,12 @@ CONTENT.etContact = {
 }
 
 /* ------------------------------------------------------------ languages --
-   PLACEHOLDER DATA. No language list exists in any source document. These are
-   here so the field on screens 7 and 14 can be demonstrated at all; they are
+   PLACEHOLDER DATA. No sign-language list exists in any source document. This is
+   here so the field on screen 7 can be demonstrated at all; it is
    not reference data and must not be read as a shortlist. Flagged on screen,
    in the release notes and in REFERENCE.md. */
 
 CONTENT.placeholderLanguages = {
-  spoken: [
-    'Arabic', 'Bengali', 'Farsi', 'French', 'Kurdish Sorani',
-    'Polish', 'Portuguese', 'Punjabi', 'Romanian', 'Somali', 'Urdu'
-  ],
   sign: [
     'British Sign Language (BSL)', 'Deafblind manual', 'Irish Sign Language (ISL)',
     'Lipspeaker', 'Makaton', 'Sign Supported English (SSE)'
@@ -146,8 +142,8 @@ CONTENT.placeholderLanguages = {
 }
 
 CONTENT.placeholderNote =
-  'Prototype note: this list is placeholder data, not a real language list. ' +
-  'No language list exists in any of the source documents.'
+  'Prototype note: this list is placeholder data, not a real sign-language list. ' +
+  'No sign-language list exists in any of the source documents.'
 
 /* -------------------------------------------------------------- screens --
    `when` is the predicate from the flow table: the engine skips any screen
@@ -512,76 +508,6 @@ CONTENT.screens = [
     ],
     /* Missing article in the source — inconsistency xv. Reproduced. */
     exclusive: { id: 'hearings-none', label: 'I do not need to ask for certain type of hearing at this time' }
-  },
-
-  /* -------------------------------------------------------------- 12 --- */
-  {
-    id: 'welsh',
-    shell: 'microsite',
-    caption: 'Welsh language for [Party name]',
-    heading: 'Do you have any Welsh requirements?',
-    type: 'checkboxes',
-    stateKey: 'welsh',
-    blocks: [
-      { p: 'Welsh speakers have the right to use Welsh when interacting with HMCTS.' },
-      { p: 'If you need support in other languages you can tell us later.' }
-    ],
-    hint: 'Select all that apply to you',
-    options: [
-      { id: 'welsh-speak', label: 'I want to speak Welsh at hearings', code: null },
-      { id: 'welsh-documents', label: 'I want to receive communication and documents in Welsh', code: null }
-    ],
-    /* Phrased differently from every RA screen — inconsistency x. */
-    exclusive: { id: 'welsh-none', label: 'No, I do not have any Welsh requirements' }
-  },
-
-  /* -------------------------------------------------------------- 13 --- */
-  {
-    id: 'interpreter',
-    shell: 'microsite',
-    /* A literal sample name, where every other section uses the token
-       — inconsistency xi. Reproduced. */
-    caption: 'Language interpreter for John Doe',
-    heading: 'Language interpreter at a hearing',
-    type: 'radios',
-    stateKey: 'interpreter',
-    blocks: [
-      /* First paragraph is annotated "Copy you can customise". */
-      { p: 'If English is not your first language you can ask for an interpreter who speaks your first language. An interpreter can help you with speaking and listening at a hearing.' },
-      { p: 'Interpreters cannot help with translating written documents.' },
-      { inset: 'You cannot bring your own spoken language interpreter to the hearing.' }
-    ],
-    legend: 'Do you need a language interpreter at the hearing?',
-    options: [
-      { id: 'yes', label: 'Yes, I need to ask for a language interpreter',
-        hint: 'You can tell us which language and if you have a gender preference' },
-      { id: 'no', label: 'No, I do not need a language interpreter at this time' }
-    ]
-  },
-
-  /* -------------------------------------------------------------- 14 --- */
-  {
-    id: 'interpreter-language',
-    shell: 'microsite',
-    caption: 'Language interpreter for John Doe',
-    heading: 'Which language interpreter do you need to ask for?',
-    type: 'language',
-    stateKey: 'interpreterLanguage',
-    languages: 'spoken',
-    when: function (s) { return s.interpreter === 'yes' },
-    blocks: [
-      /* "a interpreter" is in the source — inconsistency xvi. Reproduced. */
-      { p: "If you need to ask for a interpreter of your chosen gender, select 'Enter my language requirements manually'." }
-    ],
-    selectLabel: 'Start typing to choose the language',
-    manual: {
-      label: 'Enter my language requirements manually',
-      hint: 'Include your chosen language, dialect and gender if required',
-      revealLabel: 'Enter the type of language support you need to ask for',
-      maxLength: 80
-    },
-    exclusive: null,
-    summaryLabel: 'Yes, I need to ask for a language interpreter'
   },
 
   /* -------------------------------------------------------------- 17 --- */

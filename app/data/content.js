@@ -48,8 +48,7 @@ var CONTENT = {}
        something the documentation claims.
 
    Tokens deliberately left OUT of this map, because no value has been
-   supplied for them, still render literally: [Contacts for help],
-   [Service configured contact details] and [Service contact details]. */
+   supplied for them still render literally: [Service contact details]. */
 
 CONTENT.service = {
   '[Service name]': 'Employment Tribunals',
@@ -72,7 +71,7 @@ CONTENT.shells = {
     serviceName: '[Service name]',
     signOut: false,
     cymraeg: true,
-    contactDisclosure: true,
+    contactDisclosure: false,
     phaseBanner: 'This is a new service – your <a class="govuk-link" href="#" data-inert="feedback">feedback</a> will help us to improve it.',
     footerLinks: null
   },
@@ -112,8 +111,21 @@ CONTENT.shells = {
 
 /* The block that sits above the footer on every microsite screen. */
 CONTENT.contactsForHelp = {
-  heading: '[Contacts for help]',
-  body: '[Service configured contact details]'
+  heading: 'Contacts for help'
+}
+
+/* Contact details shared by the opening page and the Manage journey. */
+CONTENT.etContact = {
+  intro: 'Call one of our Employment Tribunal customer contact centres. They cannot give you legal advice.',
+  lines: [
+    'Monday to Friday, 9am to 5pm',
+    'Telephone: 0300 323 0196',
+    'Telephone: 0300 303 5176 (Welsh language)',
+    'Telephone: 0300 790 6234 (Scotland)'
+  ],
+  webchat: 'Webchat (Scotland only)',
+  link: 'Find out about call charges (opens in new tab)',
+  linkUrl: 'https://www.gov.uk/call-charges'
 }
 
 /* ------------------------------------------------------------ languages --
@@ -147,9 +159,11 @@ CONTENT.screens = [
   {
     id: 'start',
     shell: 'service',
+    caption: 'Your Support',
     title: 'Tell us if you need support',
     heading: 'Tell us if you need support',
     type: 'content',
+    showContactUs: true,
     blocks: [
       { p: 'Some people need support to access information and use our services. We call this a reasonable adjustment.' },
       { p: 'Examples of reasonable adjustments are:' },
@@ -202,10 +216,10 @@ CONTENT.screens = [
       /* Revision marks applied: "We know" -> "Some people", "often" deleted. */
       { p: 'Some people need support to access information and use our services. We call this a reasonable adjustment. Some reasonable adjustments need to be agreed by the judge or HMCTS. You can discuss with the [court/tribunal] if your needs change.' }
     ],
-    hint: 'Select all that apply to you - you can give more details later',
+    hint: 'Select all that apply to you',
     options: [
       { id: 'travel', label: 'I need adjustments to get to, into and around our buildings',
-        hint: 'For example, access and mobility support if a hearing takes place in person. Availability of some adjustments vary by venue. We may contact you after you submit your request for more information to help you access your hearing.' },
+        hint: 'For example, access and mobility support if a hearing takes place in person.' },
       { id: 'documents', label: 'I need documents in an alternative format',
         hint: 'For example, braille or different colours and text sizes' },
       { id: 'communication', label: 'I need help communicating and understanding',
@@ -213,7 +227,7 @@ CONTENT.screens = [
       { id: 'forms', label: 'I need help with forms',
         hint: 'For example, help with completing forms on paper or online' },
       { id: 'comfort', label: 'I need something to feel comfortable during a hearing',
-        hint: 'For example, breaks or extra space. Think about what you would need if the hearing was in person, by phone or video. We may contact you after you submit your request to ask for supporting information. In some cases, we might need to arrange a hearing to make a decision on your support.' },
+        hint: 'For example, breaks or extra space. Think about what you would need if the hearing was in person, by phone or video.' },
       { id: 'support', label: 'I need to bring support with me to a hearing',
         hint: 'For example, someone you know or an assistance dog' },
       { id: 'hearings', label: 'I need to ask for a certain type of hearing',
@@ -232,18 +246,20 @@ CONTENT.screens = [
     caption: 'Reasonable adjustments for [Party name]',
     heading: 'I need adjustments to get to, into and around our buildings',
     type: 'checkboxes',
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     when: function (s) { return s.triage.indexOf('travel') !== -1 },
     options: [
       { id: 'travel-chair', label: 'A different type of chair', code: null,
+        hint: 'For example, a chair with back support',
         comment: { prompt: 'Describe what type of chair you need',
-                   hint: 'For example, a chair with back support',
                    input: 'text', maxLength: 200 } },
       { id: 'travel-toilet', label: 'Accessible toilet', code: null },
       { id: 'travel-guiding', label: 'Guiding in the building', code: null,
         comment: { prompt: 'Describe what help you would need being guided in the building',
                    input: 'text', maxLength: 200 } },
-      { id: 'travel-lift', label: 'Help using a lift', code: null },
+      { id: 'travel-lift', label: 'Help using a lift', code: null,
+        comment: { prompt: 'Tell us what help you would need to use the lift',
+                   input: 'text', maxLength: 200 } },
       { id: 'travel-parking', label: 'Parking space close to the venue', code: null,
         comment: { prompt: 'Tell us why you need a parking space close to the venue',
                    input: 'text', maxLength: 200 } },
@@ -271,7 +287,7 @@ CONTENT.screens = [
          carry the same sentence in its pre-edit form; see inconsistency viii. */
       { p: 'Think about all communications with the [court/tribunal], including what you might need at a hearing. Consider remote and in-person hearings in case your preferred hearing type is not possible.' }
     ],
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     options: [
       { id: 'documents-audio', label: 'Audio translation of documents', code: null },
       { id: 'documents-braille', label: 'Braille documents', code: null },
@@ -301,7 +317,7 @@ CONTENT.screens = [
     blocks: [
       { p: 'Think about all communications with the [court/tribunal], as well as what you might need at a hearing. Consider remote and in-person hearings in case your preferred hearing type is not possible.' }
     ],
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     options: [
       { id: 'comm-explanation', label: "Explanation of the court or tribunal and who's in the room at the hearing", code: null },
       { id: 'comm-extratime', label: 'Extra time to think and explain myself', code: null,
@@ -342,7 +358,7 @@ CONTENT.screens = [
     blocks: [
       { p: 'Think about all communications with the [court/tribunal], as well as what you might need at a hearing. Consider remote and in-person hearings in case your preferred hearing type is not possible.' }
     ],
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     options: [
       { id: 'he-hearingloop', label: 'Hearing loop (hearing enhancement system)', code: null },
       { id: 'he-infrared', label: 'Infrared receiver (hearing enhancement system)', code: null },
@@ -388,7 +404,7 @@ CONTENT.screens = [
     heading: 'I need help with forms',
     type: 'checkboxes',
     when: function (s) { return s.triage.indexOf('forms') !== -1 },
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     options: [
       /* RA0018 "Support filling in forms" is the only flag code attested in any
          source document, but nothing states which of these options it maps to,
@@ -416,7 +432,7 @@ CONTENT.screens = [
     blocks: [
       { p: 'Think about what you would need if the hearing was in person, by phone or video.' }
     ],
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     options: [
       { id: 'comfort-lighting', label: 'Appropriate lighting', code: null,
         comment: { prompt: 'Describe what type of lighting you need', input: 'text', maxLength: 200 } },
@@ -445,7 +461,7 @@ CONTENT.screens = [
          — inconsistency vi. */
       { p: 'Think about what you would need if a hearing was in person, by phone or video.' }
     ],
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     options: [
       { id: 'support-dog', label: 'Assistance / guide dog', code: null },
       /* These two prompts invite naming a third party, against the microsite
@@ -479,7 +495,7 @@ CONTENT.screens = [
       /* Revision applied: the struck sentence replaced by the green one. */
       { p: 'The [court/tribunal] will consider your request for a hearing type and tell you if they can support it. The [court/tribunal] may need to decide on the hearing type. We will send you instructions on how to attend before the hearing.' }
     ],
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     /* The only screen where every option carries a mandatory comment. All three
        stay selectable together, as drawn — no validation was designed. See
        open question 7. */
@@ -510,7 +526,7 @@ CONTENT.screens = [
       { p: 'Welsh speakers have the right to use Welsh when interacting with HMCTS.' },
       { p: 'If you need support in other languages you can tell us later.' }
     ],
-    hint: 'Select all that apply',
+    hint: 'Select all that apply to you',
     options: [
       { id: 'welsh-speak', label: 'I want to speak Welsh at hearings', code: null },
       { id: 'welsh-documents', label: 'I want to receive communication and documents in Welsh', code: null }

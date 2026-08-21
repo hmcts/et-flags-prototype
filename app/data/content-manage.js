@@ -54,20 +54,6 @@ CONTENT.shells.et = {
   ]
 }
 
-/* The only real contact details supplied anywhere in the project — transcribed
-   from the newer version of the success screen. Every other contact block in
-   the prototype is still an unresolved token. */
-CONTENT.etContact = {
-  intro: 'Call one of our employment tribunal customer contact centres. They cannot give you legal advice.',
-  lines: [
-    'Monday to Friday, 9am to 5pm',
-    'Telephone: 0300 323 0196',
-    'Telephone: 0300 303 5176 (Welsh language)',
-    'Telephone: 0300 790 6234 (Scotland)'
-  ],
-  link: 'Find out about call charges (opens in new tab)'
-}
-
 CONTENT.screens = CONTENT.screens.concat([
 
   /* -------------------------------------------------------------- M1 --- */

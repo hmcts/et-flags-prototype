@@ -215,7 +215,7 @@ CONTENT.screens = [
     hint: 'Select all that apply to you',
     options: [
       { id: 'travel', label: 'I need adjustments to get to, into and around our buildings',
-        hint: 'For example, access and mobility support if a hearing takes place in person.' },
+        hint: 'For example, access and mobility support if a hearing takes place in person' },
       { id: 'documents', label: 'I need documents in an alternative format',
         hint: 'For example, braille or different colours and text sizes' },
       { id: 'communication', label: 'I need help communicating and understanding',
@@ -320,7 +320,7 @@ CONTENT.screens = [
         comment: { prompt: 'Tell us why you would need extra time to think and explain yourself',
                    input: 'text', maxLength: 200 } },
       { id: 'comm-enhancement', label: 'Hearing enhancement system (Hearing/Induction Loop, Infrared Receiver)', code: null,
-        hint: 'You can tell us which type of hearing enhancement in the next step. Think about all communications with the tribunal, as well as what you might need at a hearing. Consider remote and in-person hearings, in case your preferred hearing type is not possible.',
+        hint: 'You can tell us which type of hearing enhancement in the next step',
         routesTo: 'hearing-enhancement' },
       { id: 'comm-intermediary', label: 'Intermediary', code: null,
         hint: 'A person to help you if you have communication needs by providing professional support to participate in a hearing' },

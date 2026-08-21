@@ -1,0 +1,10 @@
+<p class="govuk-body">{{ content.etContact.intro }}</p>
+<ul class="govuk-list">
+  {% for line in content.etContact.lines %}
+    <li>{{ line }}</li>
+  {% endfor %}
+  <li><a class="govuk-link" href="#" data-inert="webchat">{{ content.etContact.webchat }}</a></li>
+</ul>
+<p class="govuk-body">
+  <a class="govuk-link" href="{{ content.etContact.linkUrl }}" target="_blank" rel="noreferrer noopener">{{ content.etContact.link }}</a>
+</p>

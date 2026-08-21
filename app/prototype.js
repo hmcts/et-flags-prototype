@@ -214,17 +214,13 @@ function blockHtml (blocks) {
 function commentFieldHtml (option, state) {
   if (!option.comment) return null
   const id = `comment-${option.id}`
-  const describedBy = `${option.comment.hint ? `${id}-hint ` : ''}${id}-info`
   const comment = state.selections[option.id] ? state.selections[option.id].comment : ''
   const field = option.comment.input === 'textarea'
-    ? `<textarea class="govuk-textarea govuk-js-character-count" id="${id}" name="${id}" rows="3" data-maxlength="${option.comment.maxLength}" aria-describedby="${describedBy}">${escapeHtml(comment)}</textarea>`
-    : `<input class="govuk-input govuk-js-character-count" id="${id}" name="${id}" type="text" data-maxlength="${option.comment.maxLength}" aria-describedby="${describedBy}" value="${escapeHtml(comment)}">`
+    ? `<textarea class="govuk-textarea govuk-js-character-count" id="${id}" name="${id}" rows="3" data-maxlength="${option.comment.maxLength}" aria-describedby="${id}-info">${escapeHtml(comment)}</textarea>`
+    : `<input class="govuk-input govuk-js-character-count" id="${id}" name="${id}" type="text" data-maxlength="${option.comment.maxLength}" aria-describedby="${id}-info" value="${escapeHtml(comment)}">`
 
   return `<div class="govuk-form-group govuk-character-count">` +
     `<label class="govuk-label" for="${id}">${escapeHtml(resolve(option.comment.prompt))}</label>` +
-    (option.comment.hint
-      ? `<div class="govuk-hint" id="${id}-hint">${escapeHtml(resolve(option.comment.hint))}</div>`
-      : '') +
     field +
     `<div id="${id}-info" class="govuk-hint govuk-character-count__message" aria-hidden="true"></div>` +
     `<div class="govuk-visually-hidden" aria-live="polite" id="${id}-live"></div>` +
@@ -232,14 +228,18 @@ function commentFieldHtml (option, state) {
 }
 
 function checkboxItems (screen, state) {
-  const items = screen.options.map((option) => ({
-    id: option.id,
-    value: option.id,
-    text: resolve(option.label),
-    hint: option.hint ? { text: resolve(option.hint) } : undefined,
-    checked: selected(state, option.id),
-    conditional: option.comment ? { html: commentFieldHtml(option, state) } : undefined
-  }))
+  const items = screen.options.map((option) => {
+    const hint = option.hint || (option.comment && option.comment.hint)
+
+    return {
+      id: option.id,
+      value: option.id,
+      text: resolve(option.label),
+      hint: hint ? { text: resolve(hint) } : undefined,
+      checked: selected(state, option.id),
+      conditional: option.comment ? { html: commentFieldHtml(option, state) } : undefined
+    }
+  })
 
   if (screen.exclusive) {
     items.push({ divider: 'or' })

@@ -1,5 +1,6 @@
 {% extends "layouts/screen.html" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% block screenContent %}
   <div class="govuk-grid-row">
@@ -30,6 +31,18 @@
           {% endif %}
         </div>
       </form>
+
+      {% if screen.showContactUs %}
+        {% set contactUsHtml %}
+          {% include "partials/et-contact-details.html" %}
+        {% endset %}
+
+        {{ govukDetails({
+          summaryText: "Contact us",
+          html: contactUsHtml,
+          classes: "govuk-!-margin-top-6"
+        }) }}
+      {% endif %}
     </div>
   </div>
 {% endblock %}
